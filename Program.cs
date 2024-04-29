@@ -3,23 +3,75 @@ using DesafioProjetoHospedagem.Models;
 
 Console.OutputEncoding = Encoding.UTF8;
 
-// Cria os modelos de hóspedes e cadastra na lista de hóspedes
+string opcao = string.Empty;
+bool exibirMenu = true;
+Pessoa pessoa= new Pessoa();
+Suite suite = new Suite();
 List<Pessoa> hospedes = new List<Pessoa>();
 
-Pessoa p1 = new Pessoa(nome: "Hóspede 1");
-Pessoa p2 = new Pessoa(nome: "Hóspede 2");
 
-hospedes.Add(p1);
-hospedes.Add(p2);
+// Realiza o loop do menu
+while (exibirMenu)
+{
+    Console.Clear();
+    Console.WriteLine("Digite a sua opção:");
+    Console.WriteLine("1 - Cadastrar hóspedes");
+    Console.WriteLine("2 - Cadastrar Suíte");
+    Console.WriteLine("3 - Cadastrar Reserva");
+    Console.WriteLine("4 - Encerrar");
 
-// Cria a suíte
-Suite suite = new Suite(tipoSuite: "Premium", capacidade: 2, valorDiaria: 30);
+    switch (Console.ReadLine())
+    {
+        case "1":
+            Console.WriteLine("Quantas pessoas serão cadastradas");
+            int qtde = Convert.ToInt32(Console.ReadLine());
+            hospedes=pessoa.CadastrarHospedes(qtde);
+            break;
 
-// Cria uma nova reserva, passando a suíte e os hóspedes
-Reserva reserva = new Reserva(diasReservados: 5);
-reserva.CadastrarSuite(suite);
-reserva.CadastrarHospedes(hospedes);
+        case "2":
+            // Cria a suíte
+            Console.WriteLine("Tipo de Suite");
+            string tipo = Console.ReadLine();
+            Console.WriteLine("Capacidade");
+            int capacidade = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Valor Diária");
+            int valorDia = Convert.ToInt32(Console.ReadLine());
+            suite = new Suite(tipoSuite: tipo, capacidade: capacidade, valorDiaria: valorDia);
+            break;
 
-// Exibe a quantidade de hóspedes e o valor da diária
-Console.WriteLine($"Hóspedes: {reserva.ObterQuantidadeHospedes()}");
-Console.WriteLine($"Valor diária: {reserva.CalcularValorDiaria()}");
+        case "3":
+            Console.WriteLine("Dias de Reserva");
+            Reserva reserva = new Reserva(diasReservados: Convert.ToInt32(Console.ReadLine()));
+            reserva.CadastrarSuite(suite);
+            reserva.CadastrarHospedes(hospedes);
+
+            if(reserva.Hospedes==null)
+            Console.WriteLine($"Quantidade de hóspedes {hospedes.Count} maior do que o permitido {suite.Capacidade}");
+            else{
+            // Exibe a quantidade de hóspedes e o valor da diária
+            Console.WriteLine($"Hóspedes: {reserva.ObterQuantidadeHospedes()}");
+            Console.WriteLine($"Valor diária: {reserva.CalcularValorDiaria()}");
+            }
+            
+            break;
+
+        case "4":
+            exibirMenu = false;
+            break;
+
+        default:
+            Console.WriteLine("Opção inválida");
+            break;
+    }
+
+    Console.WriteLine("Pressione uma tecla para continuar");
+    Console.ReadLine();
+}
+
+Console.WriteLine("O programa se encerrou");
+
+
+
+
+
+
